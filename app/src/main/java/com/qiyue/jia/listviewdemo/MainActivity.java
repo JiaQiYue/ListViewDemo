@@ -2,7 +2,10 @@ package com.qiyue.jia.listviewdemo;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +30,13 @@ public class MainActivity extends AppCompatActivity {
         FruitAdapter fruitAdapter = new FruitAdapter(this, R.layout.fruit_item, fruitList);
         mListView = (ListView) findViewById(R.id.list_view);
         mListView.setAdapter(fruitAdapter);
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                Fruit fruit = fruitList.get(position);
+                Toast.makeText(MainActivity.this,fruit.getName(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     /**

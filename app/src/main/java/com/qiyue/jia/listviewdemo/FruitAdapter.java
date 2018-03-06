@@ -19,8 +19,6 @@ import java.util.List;
 public class FruitAdapter extends ArrayAdapter<Fruit> {
 
     private int resourceId;
-    private ImageView mFruitImage;
-    private TextView mFruitText;
 
     /**
      * 重写了父类的一组构造函数，
@@ -40,15 +38,37 @@ public class FruitAdapter extends ArrayAdapter<Fruit> {
         //获取当前的Fruit实例
         Fruit fruit = getItem(position);
         //调用LayoutInflater中的inflate加载子条目布局
+        /**
+         * 基本使用
+         */
         //第三个参数指定为false，表名只让我们在父布局中声明的layout属性生效，
         //但不会这个view添加父布局，因为view一旦有了父布局之后，就不能添加到listview中了
-        View view = LayoutInflater.from(getContext()).inflate(resourceId, parent, false);
+//        View view = LayoutInflater.from(getContext()).inflate(resourceId, parent, false);
 
-        mFruitImage = view.findViewById(R.id.im_fruit_image);
-        mFruitText = view.findViewById(R.id.tv_fruit_name);
-        mFruitImage.setImageResource(fruit.getImageId());
-        mFruitText.setText(fruit.getName());
+        /**
+         * 复用convertView
+         */
+        View view;
+        ViewHolder viewHolder;
+        if (convertView == null ) {
+            view = LayoutInflater.from(getContext()).inflate(resourceId, parent, false);
+            viewHolder = new ViewHolder();
+            viewHolder.fruitImage = (ImageView) view.findViewById(R.id.im_fruit_image);
+            viewHolder.fruitText = (TextView) view.findViewById(R.id.tv_fruit_name);
+            view.setTag(viewHolder);
+        }else {
+            view = convertView;
+            viewHolder = (ViewHolder) view.getTag();
+        }
+
+        viewHolder.fruitImage.setImageResource(fruit.getImageId());
+        viewHolder.fruitText.setText(fruit.getName());
 
         return view;
+    }
+
+    class ViewHolder {
+        ImageView fruitImage;
+        TextView fruitText;
     }
 }
